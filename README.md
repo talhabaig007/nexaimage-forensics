@@ -42,25 +42,24 @@ With its sleek dark-themed UI and glassmorphism design, NexaImage Forensics prov
 Founded with the mission to make digital forensics accessible and effective, NexaSecure Tech combines cutting-edge technology with user-centric design to deliver powerful security solutions.
 
 ### 🌐 Our Website
-[![Website](https://img.shields.io/badge/Website-www.nexasecure.tech-00ffff?style=for-the-badge&logo=google-chrome)](https://www.nexasecure.tech)
+[![Website](https://img.shields.io/badge/Website-www.nexasectech.com-00ffff?style=for-the-badge&logo=google-chrome)](https://www.nexasectech.com)
 
 ### 📱 Connect With NexaSecure Tech
 
 <p align="center">
   
-  [![Twitter](https://img.shields.io/badge/Twitter-@NexaSecureTech-1DA1F2?style=for-the-badge&logo=twitter)](https://twitter.com/NexaSecureTech)
-  [![LinkedIn](https://img.shields.io/badge/LinkedIn-NexaSecure%20Tech-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/company/nexasecure-tech)
-  [![GitHub](https://img.shields.io/badge/GitHub-NexaSecure-181717?style=for-the-badge&logo=github)](https://github.com/nexasecure)
+  [![Twitter](https://img.shields.io/badge/Twitter-@NexaSecureTech-1DA1F2?style=for-the-badge&logo=twitter)](https://twitter.com/talhabaig007)
+  [![LinkedIn](https://img.shields.io/badge/LinkedIn-NexaSecure%20Tech-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/company/nexasecuretech)
+  [![GitHub](https://img.shields.io/badge/GitHub-NexaSecure-181717?style=for-the-badge&logo=github)](https://github.com/talhabaig007)
   [![Instagram](https://img.shields.io/badge/Instagram-@NexaSecureTech-E4405F?style=for-the-badge&logo=instagram)](https://instagram.com/NexaSecureTech)
   [![Facebook](https://img.shields.io/badge/Facebook-NexaSecure%20Tech-1877F2?style=for-the-badge&logo=facebook)](https://facebook.com/NexaSecureTech)
-  [![YouTube](https://img.shields.io/badge/YouTube-NexaSecure%20Tech-FF0000?style=for-the-badge&logo=youtube)](https://youtube.com/@NexaSecureTech)
+  [![YouTube](https://img.shields.io/badge/YouTube-NexaSecure%20Tech-FF0000?style=for-the-badge&logo=youtube)](https://youtube.com/@talhabaighacker)
   
 </p>
 
 ### 📧 Contact Us
-- **Email:** info@nexasecure.tech
-- **Support:** support@nexasecure.tech
-- **Sales:** sales@nexasecure.tech
+- **Email:** info@nexasectech.com
+- **Support:** baigb4165@gmail.com
 
 ---
 
@@ -152,39 +151,50 @@ Founded with the mission to make digital forensics accessible and effective, Nex
 ```bash
 git clone https://github.com/nexasecure/nexaimage-forensics.git
 cd nexaimage-forensics
+```
 
-Step 2: Install Python Dependencies
-bash
+
+### Step 2: Install Python Dependencies
+
+```bash
 pip install -r requirements.txt
-Step 3: Install Tesseract OCR
-Windows
+```
+### Step 3: Install Tesseract OCR
+- Windows
 Download and install from: Tesseract OCR for Windows
 
-Linux (Ubuntu/Debian)
-bash
+### Linux (Ubuntu/Debian)
+```bash
 sudo apt-get update
 sudo apt-get install tesseract-ocr
 sudo apt-get install tesseract-ocr-eng
 sudo apt-get install tesseract-ocr-urd
-macOS
-bash
+```
+### macOS
+```bash
 brew install tesseract
 brew install tesseract-lang
-Step 4: Run the Application
-bash
+```
+### Step 4: Run the Application
+```bash
 python app.py
-Step 5: Open in Browser
+```
+### Step 5: Open in Browser
 Navigate to: http://localhost:5000
 
-📁 Project Structure
-text
-nexaimage-forensics/
-├── app.py                      # Main Flask Application
-├── config.py                   # Configuration File
-├── requirements.txt            # Python Dependencies
-├── README.md                   # Project Documentation
-├── img.png                     # Project Banner Image
-├── utils/                      # Utility Modules
+## 📁 Project Structure
+
+<pre>
+<b>nexaimage-forensics/</b>
+│
+├── <b>app.py</b>                      # Main Flask Application
+├── <b>config.py</b>                   # Configuration File
+├── <b>requirements.txt</b>            # Python Dependencies
+├── <b>README.md</b>                   # Project Documentation
+├── <b>LICENSE</b>                     # MIT License
+├── <b>img.png</b>                     # Project Banner Image
+│
+├── <b>utils/</b>                      # Utility Modules
 │   ├── __init__.py
 │   ├── exif_analyzer.py        # EXIF Metadata Extractor
 │   ├── image_analyzer.py       # Image Quality Analyzer
@@ -192,15 +202,17 @@ nexaimage-forensics/
 │   ├── ocr_processor.py        # OCR Text Extractor
 │   ├── report_generator.py     # PDF Report Generator
 │   └── security_analyzer.py    # Security Risk Assessor
-├── static/                     # Static Assets
-│   ├── css/
+│
+├── <b>static/</b>                     # Static Assets
+│   ├── <b>css/</b>
 │   │   └── style.css           # Main Stylesheet
-│   └── js/
+│   └── <b>js/</b>
 │       ├── main.js             # Core JavaScript
 │       ├── upload.js           # Upload Handler
 │       ├── map.js              # GPS Map Functions
 │       └── report.js           # Report Generator
-├── templates/                  # HTML Templates
+│
+├── <b>templates/</b>                  # HTML Templates
 │   ├── base.html               # Base Template
 │   ├── index.html              # Home Page
 │   ├── dashboard.html          # Dashboard
@@ -209,46 +221,48 @@ nexaimage-forensics/
 │   ├── settings.html           # Settings Page
 │   ├── about.html              # About Page
 │   └── analysis_sections.html  # Reusable Sections
-└── uploads/                    # Temporary Upload Folder
+│
+└── <b>uploads/</b>                    # Temporary Upload Folder
     └── .gitkeep
-🎯 Usage Guide
+</pre>
+## 🎯 Usage Guide
 1. Upload an Image
-Navigate to the Upload page
+- Navigate to the Upload page
 
-Drag & drop your image or click to browse
+- Drag & drop your image or click to browse
 
-Supported formats: JPG, JPEG, PNG, WEBP, TIFF
+- Supported formats: JPG, JPEG, PNG, WEBP, TIFF
 
-Maximum file size: 100 MB
+- Maximum file size: 100 MB
 
 2. Analyze
-Click the "Analyze Image" button
+- Click the "Analyze Image" button
 
-Wait for the analysis to complete
+- Wait for the analysis to complete
 
-View comprehensive results
+- View comprehensive results
 
 3. Review Results
-File Information: Basic file details
+- File Information: Basic file details
 
-EXIF Metadata: Complete metadata extraction
+- EXIF Metadata: Complete metadata extraction
 
-GPS Location: Interactive map with coordinates
+- GPS Location: Interactive map with coordinates
 
-Image Analysis: Quality metrics and colors
+- Image Analysis: Quality metrics and colors
 
-OCR Text: Extracted text content
+- OCR Text: Extracted text content
 
-Hash Values: Cryptographic hashes
+- Hash Values: Cryptographic hashes
 
-Security Analysis: Risk assessment
+- Security Analysis: Risk assessment
 
 4. Generate Report
-Click "Generate Forensic PDF Report"
+- Click "Generate Forensic PDF Report"
 
-Download professional PDF with all findings
+- Download professional PDF with all findings
 
-🛡️ Security Features
+## 🛡️ Security Features
 ✅ Secure file upload validation
 
 ✅ Restricted file extensions
@@ -263,68 +277,44 @@ Download professional PDF with all findings
 
 ✅ Client-side processing options
 
-📊 Modules Overview
-Module	Description	Status
-Image Preview	Display uploaded image with basic info	✅
-Image Information	Resolution, dimensions, color mode, DPI	✅
-EXIF Metadata	Camera details, timestamps, settings	✅
-GPS Analysis	Location extraction with interactive maps	✅
-Metadata Summary	Quick overview cards	✅
-Cryptographic Hashes	MD5, SHA1, SHA256, SHA512	✅
-Image Analysis	Brightness, contrast, colors, noise	✅
-OCR	Text extraction (English & Urdu)	✅
-Security Analysis	Risk assessment & indicators	✅
-Hash Verification	Compare hashes for integrity	✅
-PDF Report	Professional forensic report	✅
-🔧 Technology Stack
+## 📊 Modules Overview
+### Module	Description	Status
+- Image Preview	Display uploaded image with basic info	✅
+- Image Information	Resolution, dimensions, color mode, DPI	✅
+- EXIF Metadata	Camera details, timestamps, settings	✅
+- GPS Analysis	Location extraction with interactive maps	✅
+- Metadata Summary	Quick overview cards	✅
+- Cryptographic Hashes	MD5, SHA1, SHA256, SHA512	✅
+- Image Analysis	Brightness, contrast, colors, noise	✅
+- OCR	Text extraction (English & Urdu)	✅
+- Security Analysis	Risk assessment & indicators	✅
+- Hash Verification	Compare hashes for integrity	✅
+- PDF Report	Professional forensic report	✅
 <div align="center">
-Category	Technologies
-Backend	Python 3, Flask, Gunicorn
-Frontend	HTML5, Bootstrap 5, CSS3, JavaScript (ES6)
-Libraries	Pillow, OpenCV, piexif, NumPy
-OCR	Tesseract OCR (English & Urdu)
-PDF	ReportLab
-Maps	Leaflet.js, OpenStreetMap
-Charts	Chart.js
-Icons	Font Awesome
-Security	Werkzeug, Hashlib
+
+## 🔧 Technology Stack
+
+<br>
+
+| Category | Technologies |
+|:--------:|--------------|
+| **Backend** | Python 3, Flask, Gunicorn |
+| **Frontend** | HTML5, Bootstrap 5, CSS3, JavaScript (ES6) |
+| **Libraries** | Pillow, OpenCV, piexif, NumPy |
+| **OCR** | Tesseract OCR (English & Urdu) |
+| **PDF** | ReportLab |
+| **Maps** | Leaflet.js, OpenStreetMap |
+| **Charts** | Chart.js |
+| **Icons** | Font Awesome |
+| **Security** | Werkzeug, Hashlib |
+
 </div>
-🤝 Contributing
-We welcome contributions from the community!
 
-How to Contribute
-Fork the repository
-
-Create a feature branch (git checkout -b feature/AmazingFeature)
-
-Commit your changes (git commit -m 'Add some AmazingFeature')
-
-Push to the branch (git push origin feature/AmazingFeature)
-
-Open a Pull Request
-
-Contribution Guidelines
-Follow PEP 8 coding standards
-
-Write clear commit messages
-
-Add comments to complex code
-
-Update documentation as needed
-
-Test thoroughly before submitting
-
-📄 License
+## 📄 License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 
-
-
-
-
-
-
-⚠️ Disclaimer
+## ⚠️ Disclaimer
 NexaImage Forensics is designed for legitimate digital forensics and security research purposes only. Users are responsible for complying with all applicable laws and regulations regarding digital forensics and privacy.
 
 NexaSecure Tech is not responsible for any misuse of this software.
@@ -336,7 +326,7 @@ NexaSecure Tech is not responsible for any misuse of this software.
 
 ⭐ Featured in Security Weekly
 
-📈 Version History
+## 📈 Version History
 Version 1.0.0 (2026)
 ✅ Initial Release
 
@@ -354,103 +344,41 @@ Version 1.0.0 (2026)
 
 ✅ Security Risk Assessment
 
-🌟 Star History
-https://api.star-history.com/svg?repos=nexasecure/nexaimage-forensics&type=Date
-
-📞 Support & Contact
+### 📞 Support & Contact
 Need Help?
-📧 Email: support@nexasecure.tech
+- 📧 Email: info@nexasectech.com
 
-🌐 Website: www.nexasecure.tech
+- 🌐 Website: www.nexasectech.com
 
-📚 Documentation: docs.nexasecure.tech
+- 💬 Discord: Join our server
 
-💬 Discord: Join our server
+### Business Inquiries
+- 📧 Email: info@nexasectech.com
 
-Business Inquiries
-📧 Email: info@nexasecure.tech
+- 📞 Phone: +92-304-4735274
 
-📞 Phone: +92-XXX-XXXXXXX
+- 🏢 Address: NexaSecure Tech Headquarters in Lahore, Punjab, Pakistan
 
-🏢 Address: NexaSecure Tech Headquarters
-
-🤗 Acknowledgments
+### 🤗 Acknowledgments
 Special thanks to:
 
-All our contributors and supporters
+- All our contributors and supporters
 
-The open-source community
+- The open-source community
 
-Our valued clients and partners
+- Our valued clients and partners
 
-Security researchers worldwide
+- Security researchers worldwide
 
 <div align="center"> <br>
 🔒 Developed with ❤️ by
-<img src="img.png" alt="NexaSecure Tech Logo" width="200" style="border-radius: 10px;">
+<img src="logo.png" alt="NexaSecure Tech Logo" width="200" style="border-radius: 10px;">
 NexaSecure Tech
 Digital Forensics & Cyber Security Solutions
 
 <br>
-https://img.shields.io/badge/Website-www.nexasecure.tech-00ffff?style=for-the-badge&logo=google-chrome
-https://img.shields.io/badge/Email-info@nexasecure.tech-FF0000?style=for-the-badge&logo=gmail
+https://img.shields.io/badge/Website-www.nexasectech.com-00ffff?style=for-the-badge&logo=google-chrome
+https://img.shields.io/badge/Email-info@nexasectech.com-FF0000?style=for-the-badge&logo=gmail
 
-<br> <p> <a href="https://twitter.com/NexaSecureTech"><img src="https://img.shields.io/badge/Twitter-Follow-1DA1F2?style=social&logo=twitter" alt="Twitter"></a> <a href="https://www.linkedin.com/company/nexasecure-tech"><img src="https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=social&logo=linkedin" alt="LinkedIn"></a> <a href="https://github.com/nexasecure"><img src="https://img.shields.io/badge/GitHub-Follow-181717?style=social&logo=github" alt="GitHub"></a> <a href="https://instagram.com/NexaSecureTech"><img src="https://img.shields.io/badge/Instagram-Follow-E4405F?style=social&logo=instagram" alt="Instagram"></a> <a href="https://facebook.com/NexaSecureTech"><img src="https://img.shields.io/badge/Facebook-Like-1877F2?style=social&logo=facebook" alt="Facebook"></a> <a href="https://youtube.com/@NexaSecureTech"><img src="https://img.shields.io/badge/YouTube-Subscribe-FF0000?style=social&logo=youtube" alt="YouTube"></a> </p> <br> <p>© 2026 <strong>NexaSecure Tech</strong>. All Rights Reserved.</p> <p>Powered by NexaSecure Tech | Digital Forensics & Cyber Security Solutions</p> <br> <p> <sub> <a href="https://www.nexasecure.tech">Website</a> • <a href="https://www.nexasecure.tech/privacy">Privacy Policy</a> • <a href="https://www.nexasecure.tech/terms">Terms of Service</a> • <a href="https://www.nexasecure.tech/contact">Contact Us</a> </sub> </p></div> ```
-📝 LICENSE File
-Aap ko LICENSE file bhi create karni hogi. Ye raha LICENSE file ka code:
+<br> <p> <a href="https://twitter.com/talhabaig007"><img src="https://img.shields.io/badge/Twitter-Follow-1DA1F2?style=social&logo=twitter" alt="Twitter"></a> <a href="https://www.linkedin.com/company/nexasecuretech"><img src="https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=social&logo=linkedin" alt="LinkedIn"></a> <a href="https://github.com/talhabaig007"><img src="https://img.shields.io/badge/GitHub-Follow-181717?style=social&logo=github" alt="GitHub"></a> <a href="https://instagram.com/talhabaig007"><img src="https://img.shields.io/badge/Instagram-Follow-E4405F?style=social&logo=instagram" alt="Instagram"></a> <a href="https://facebook.com/talhabaighacker"><img src="https://img.shields.io/badge/Facebook-Like-1877F2?style=social&logo=facebook" alt="Facebook"></a> <a href="https://youtube.com/@talhabaighacker"><img src="https://img.shields.io/badge/YouTube-Subscribe-FF0000?style=social&logo=youtube" alt="YouTube"></a> </p> <br> <p>© 2026 <strong>NexaSecure Tech</strong>. All Rights Reserved.</p> <p>Powered by NexaSecure Tech | Digital Forensics & Cyber Security Solutions</p> <br> <p> <sub> <a href="https://www.nexasectech.com">Website</a> • <a href="https://www.nexasectech.com/privacy.php">Privacy Policy</a> • <a href="https://www.nexasectech.com/terms.php">Terms of Service</a> • <a href="https://www.nexasectech.com/contact.php">Contact Us</a> </sub> </p></div> ```
 
-LICENSE
-
-text
-MIT License
-
-Copyright (c) 2026 NexaSecure Tech
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
----
-
-NexaSecure Tech
-Website: https://www.nexasecure.tech
-Email: info@nexasecure.tech
-🖼️ img.png
-Aap apni img.png file project ke root folder mein rakhein. Ye image README mein automatically display hogi.
-
-Recommended image size: 1200 x 600 pixels
-Format: PNG with transparent background (or any PNG)
-
-Ab aapki README.md file complete hai jisme:
-
-✅ NexaSecure Tech ka complete zikar
-
-✅ Website link: https://www.nexasecure.tech
-
-✅ All social media accounts (Twitter, LinkedIn, GitHub, Instagram, Facebook, YouTube)
-
-✅ Email addresses (info@nexasecure.tech, support@nexasecure.tech, sales@nexasecure.tech)
-
-✅ MIT License with link
-
-✅ img.png image display
-
-✅ Professional badges and shields
-
-✅ Complete project documentation
-
-✅ Features, installation guide, and usage instructions
