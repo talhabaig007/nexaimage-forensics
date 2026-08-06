@@ -128,12 +128,12 @@ Founded with the mission to make digital forensics accessible and effective, Nex
   <br>
   
   ### Analysis Results
-  <img src="img.png" alt="Analysis Results" width="80%" style="border-radius: 10px; margin: 20px 0;">
+  <img src="info.png" alt="Analysis Results" width="80%" style="border-radius: 10px; margin: 20px 0;">
   
   <br>
   
-  ### GPS Map View
-  <img src="img.png" alt="GPS Map" width="80%" style="border-radius: 10px; margin: 20px 0;">
+  ### Hashes View
+  <img src="hash.png" alt="GPS Map" width="80%" style="border-radius: 10px; margin: 20px 0;">
   
 </div>
 
