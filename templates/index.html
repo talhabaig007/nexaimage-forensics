@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - NexaImage Forensics{% endblock %}
+
+{% block content %}
+<div class="hero-section animate-fade-in-up">
+    <h1>🔍 NexaImage Forensics</h1>
+    <p class="lead">Advanced Digital Image Forensics & Metadata Analysis Platform</p>
+    <p class="text-muted">Extract, Analyze, and Verify Image Metadata with Precision</p>
+</div>
+
+<div class="upload-area glass-card" id="uploadArea">
+    <div class="upload-icon">
+        <i class="fas fa-cloud-upload-alt"></i>
+    </div>
+    <h3>Drag & Drop Your Image Here</h3>
+    <p class="text-muted">or click to browse</p>
+    <p class="small text-muted mt-3">Supported Formats: JPG, JPEG, PNG, WEBP, TIFF | Max Size: 100 MB</p>
+    <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp,.tiff" style="display: none;">
+</div>
+
+<div id="fileInfo" style="display: none;"></div>
+
+<div class="text-center mt-4">
+    <button id="analyzeBtn" class="btn btn-cyber" disabled>
+        <i class="fas fa-search"></i> Analyze Image
+    </button>
+    <button id="clearBtn" class="btn btn-outline-secondary ms-2">
+        <i class="fas fa-times"></i> Clear
+    </button>
+</div>
+
+<div id="loadingAnimation" style="display: none;"></div>
+
+<div id="analysisResults" style="display: none;">
+    <div id="fileAnalysis"></div>
+    <div id="metadataSummary"></div>
+    <div id="exifData"></div>
+    <div id="gpsData"></div>
+    <div id="imageAnalysis"></div>
+    <div id="ocrData"></div>
+    <div id="hashData"></div>
+    <div id="securityAnalysis"></div>
+    
+    <div class="text-center mt-4" id="report">
+        <button class="btn btn-cyber btn-lg" onclick="generateReport()">
+            <i class="fas fa-file-pdf"></i> Generate Forensic PDF Report
+        </button>
+    </div>
+</div>
+
+<div class="glass-card mt-5">
+    <h4><i class="fas fa-history"></i> Recent Analysis</h4>
+    <p class="text-muted">No recent analysis available. Upload an image to get started.</p>
+</div>
+
+<div class="glass-card mt-4">
+    <h4><i class="fas fa-check-circle"></i> Supported Formats</h4>
+    <div class="row mt-3">
+        <div class="col-md-2 col-6 text-center">
+            <i class="fas fa-file-image fa-2x mb-2" style="color: var(--accent);"></i>
+            <p>JPG</p>
+        </div>
+        <div class="col-md-2 col-6 text-center">
+            <i class="fas fa-file-image fa-2x mb-2" style="color: var(--accent);"></i>
+            <p>JPEG</p>
+        </div>
+        <div class="col-md-2 col-6 text-center">
+            <i class="fas fa-file-image fa-2x mb-2" style="color: var(--accent);"></i>
+            <p>PNG</p>
+        </div>
+        <div class="col-md-2 col-6 text-center">
+            <i class="fas fa-file-image fa-2x mb-2" style="color: var(--accent);"></i>
+            <p>WEBP</p>
+        </div>
+        <div class="col-md-2 col-6 text-center">
+            <i class="fas fa-file-image fa-2x mb-2" style="color: var(--accent);"></i>
+            <p>TIFF</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

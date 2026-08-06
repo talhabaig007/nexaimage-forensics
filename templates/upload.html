@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Image - NexaImage Forensics{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="fas fa-upload"></i> Upload Image for Analysis</h2>
+
+<div class="upload-area glass-card" id="uploadArea">
+    <div class="upload-icon">
+        <i class="fas fa-cloud-upload-alt"></i>
+    </div>
+    <h3>Drag & Drop Your Image Here</h3>
+    <p class="text-muted">or click to browse</p>
+    <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp,.tiff" style="display: none;">
+</div>
+
+<!-- Same analysis functionality as index -->
+{% include "analysis_sections.html" %}
+{% endblock %}

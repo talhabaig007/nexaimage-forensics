@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NexaImage Forensics{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>🔍 NexaImage</h2>
+            <p>Digital Forensics Platform</p>
+        </div>
+        
+        <nav class="mt-4">
+            <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="/upload" class="nav-item {% if request.path == '/upload' %}active{% endif %}">
+                <i class="fas fa-upload"></i> Upload Image
+            </a>
+            <a href="#imageInfo" class="nav-item">
+                <i class="fas fa-info-circle"></i> Image Information
+            </a>
+            <a href="#metadata" class="nav-item">
+                <i class="fas fa-tags"></i> Metadata
+            </a>
+            <a href="#gpsMap" class="nav-item">
+                <i class="fas fa-map-marker-alt"></i> GPS Map
+            </a>
+            <a href="#ocr" class="nav-item">
+                <i class="fas fa-font"></i> OCR
+            </a>
+            <a href="#hashes" class="nav-item">
+                <i class="fas fa-shield-alt"></i> Hashes
+            </a>
+            <a href="#imageAnalysis" class="nav-item">
+                <i class="fas fa-chart-bar"></i> Image Analysis
+            </a>
+            <a href="#security" class="nav-item">
+                <i class="fas fa-shield-haltered"></i> Security Checks
+            </a>
+            <a href="#report" class="nav-item">
+                <i class="fas fa-file-pdf"></i> Generate Report
+            </a>
+            <a href="/settings" class="nav-item {% if request.path == '/settings' %}active{% endif %}">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+            <a href="/about" class="nav-item {% if request.path == '/about' %}active{% endif %}">
+                <i class="fas fa-info-circle"></i> About
+            </a>
+        </nav>
+        
+        <div class="mt-auto p-3" style="position: absolute; bottom: 0; width: 100%;">
+            <p class="text-muted small">© 2026 NexaSecure Tech</p>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/map.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/report.js') }}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

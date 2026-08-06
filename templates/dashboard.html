@@ -1,0 +1,404 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - NexaImage Forensics{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+        <p class="text-muted">Welcome to NexaImage Forensics Dashboard</p>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="glass-card text-center">
+            <div class="card-icon mb-3">
+                <i class="fas fa-image fa-3x" style="color: var(--accent);"></i>
+            </div>
+            <h5>Total Scans</h5>
+            <h2 class="counter" style="color: var(--accent);">0</h2>
+            <p class="text-muted">Images Analyzed</p>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="glass-card text-center">
+            <div class="card-icon mb-3">
+                <i class="fas fa-check-circle fa-3x" style="color: var(--success);"></i>
+            </div>
+            <h5>Clean Images</h5>
+            <h2 class="counter" style="color: var(--success);">0</h2>
+            <p class="text-muted">No Threats Detected</p>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="glass-card text-center">
+            <div class="card-icon mb-3">
+                <i class="fas fa-exclamation-triangle fa-3x" style="color: var(--warning);"></i>
+            </div>
+            <h5>Suspicious</h5>
+            <h2 class="counter" style="color: var(--warning);">0</h2>
+            <p class="text-muted">Needs Review</p>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="glass-card text-center">
+            <div class="card-icon mb-3">
+                <i class="fas fa-shield-haltered fa-3x" style="color: var(--danger);"></i>
+            </div>
+            <h5>High Risk</h5>
+            <h2 class="counter" style="color: var(--danger);">0</h2>
+            <p class="text-muted">Security Alerts</p>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity & Quick Actions -->
+<div class="row">
+    <!-- Recent Analysis -->
+    <div class="col-lg-8 mb-4">
+        <div class="glass-card">
+            <h4><i class="fas fa-history"></i> Recent Analysis</h4>
+            <div class="table-responsive mt-3">
+                <table class="table table-dark table-hover">
+                    <thead>
+                        <tr>
+                            <th>File Name</th>
+                            <th>Date</th>
+                            <th>Risk Level</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentAnalysisTable">
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">
+                                <i class="fas fa-info-circle"></i> No recent analysis available
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="col-lg-4 mb-4">
+        <div class="glass-card">
+            <h4><i class="fas fa-bolt"></i> Quick Actions</h4>
+            <div class="d-grid gap-2 mt-3">
+                <a href="/upload" class="btn btn-cyber">
+                    <i class="fas fa-upload"></i> New Analysis
+                </a>
+                <button class="btn btn-outline-info" onclick="generateReport()">
+                    <i class="fas fa-file-pdf"></i> Generate Report
+                </button>
+                <button class="btn btn-outline-warning" onclick="exportAllData()">
+                    <i class="fas fa-download"></i> Export Data
+                </button>
+                <button class="btn btn-outline-danger" onclick="clearAllData()">
+                    <i class="fas fa-trash"></i> Clear History
+                </button>
+            </div>
+        </div>
+        
+        <!-- System Status -->
+        <div class="glass-card mt-4">
+            <h4><i class="fas fa-server"></i> System Status</h4>
+            <div class="mt-3">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>API Status</span>
+                    <span class="badge bg-success">Online</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Database</span>
+                    <span class="badge bg-success">Connected</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Storage</span>
+                    <span class="badge bg-info">75% Free</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Version</span>
+                    <span class="badge bg-primary">1.0.0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="row">
+    <!-- Analysis Trends -->
+    <div class="col-lg-6 mb-4">
+        <div class="glass-card">
+            <h4><i class="fas fa-chart-line"></i> Analysis Trends</h4>
+            <canvas id="trendsChart" class="mt-3"></canvas>
+        </div>
+    </div>
+    
+    <!-- Risk Distribution -->
+    <div class="col-lg-6 mb-4">
+        <div class="glass-card">
+            <h4><i class="fas fa-chart-pie"></i> Risk Distribution</h4>
+            <canvas id="riskChart" class="mt-3"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Forensic Tools Section -->
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="glass-card">
+            <h4><i class="fas fa-tools"></i> Forensic Tools</h4>
+            <div class="row mt-3">
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="tool-card p-3 text-center">
+                        <i class="fas fa-search fa-2x mb-2" style="color: var(--accent);"></i>
+                        <h6>Metadata Analyzer</h6>
+                        <p class="small text-muted">Extract EXIF data</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="tool-card p-3 text-center">
+                        <i class="fas fa-map-marker-alt fa-2x mb-2" style="color: var(--accent);"></i>
+                        <h6>GPS Locator</h6>
+                        <p class="small text-muted">Track image location</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="tool-card p-3 text-center">
+                        <i class="fas fa-shield-alt fa-2x mb-2" style="color: var(--accent);"></i>
+                        <h6>Hash Verifier</h6>
+                        <p class="small text-muted">Verify integrity</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="tool-card p-3 text-center">
+                        <i class="fas fa-font fa-2x mb-2" style="color: var(--accent);"></i>
+                        <h6>OCR Scanner</h6>
+                        <p class="small text-muted">Extract text</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="text-center mt-4">
+    <p class="text-muted">© 2026 NexaSecure Tech. All Rights Reserved.</p>
+    <p class="text-muted small">
+        Powered by NexaSecure Tech | 
+        <a href="https://www.nexasecure.tech" target="_blank" style="color: var(--accent);">
+            www.nexasecure.tech
+        </a>
+    </p>
+</div>
+
+<script>
+// Initialize Dashboard Charts
+document.addEventListener('DOMContentLoaded', function() {
+    initializeTrendsChart();
+    initializeRiskChart();
+    loadRecentAnalysis();
+});
+
+// Analysis Trends Chart
+function initializeTrendsChart() {
+    const ctx = document.getElementById('trendsChart');
+    if (!ctx) return;
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Scans',
+                data: [12, 19, 15, 25, 22, 30],
+                borderColor: '#00ffff',
+                backgroundColor: 'rgba(0, 255, 255, 0.1)',
+                tension: 0.4,
+                fill: true
+            }, {
+                label: 'Threats Detected',
+                data: [2, 3, 1, 5, 4, 6],
+                borderColor: '#ff4444',
+                backgroundColor: 'rgba(255, 68, 68, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#ffffff'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: '#ffffff'
+                    }
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: '#ffffff'
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Risk Distribution Chart
+function initializeRiskChart() {
+    const ctx = document.getElementById('riskChart');
+    if (!ctx) return;
+    
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Low Risk', 'Medium Risk', 'High Risk'],
+            datasets: [{
+                data: [65, 25, 10],
+                backgroundColor: [
+                    '#00ff88',
+                    '#ffaa00',
+                    '#ff4444'
+                ],
+                borderColor: 'rgba(0, 0, 0, 0.2)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#ffffff'
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Load recent analysis from local storage
+function loadRecentAnalysis() {
+    const recentAnalysis = JSON.parse(localStorage.getItem('recentAnalysis') || '[]');
+    const tableBody = document.getElementById('recentAnalysisTable');
+    
+    if (recentAnalysis.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="4" class="text-center text-muted">
+                    <i class="fas fa-info-circle"></i> No recent analysis available
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tableBody.innerHTML = recentAnalysis.slice(0, 10).map(item => `
+        <tr>
+            <td>
+                <i class="fas fa-file-image me-2"></i>
+                ${item.filename}
+            </td>
+            <td>${new Date(item.date).toLocaleDateString()}</td>
+            <td>
+                <span class="badge bg-${item.riskLevel === 'Green' ? 'success' : item.riskLevel === 'Yellow' ? 'warning' : 'danger'}">
+                    ${item.riskLevel}
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-sm btn-outline-info" onclick="viewAnalysis('${item.id}')">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteAnalysis('${item.id}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Export all data
+function exportAllData() {
+    const recentAnalysis = JSON.parse(localStorage.getItem('recentAnalysis') || '[]');
+    
+    if (recentAnalysis.length === 0) {
+        showNotification('No data to export', 'warning');
+        return;
+    }
+    
+    const blob = new Blob([JSON.stringify(recentAnalysis, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `nexaimage_export_${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    showNotification('Data exported successfully!', 'success');
+}
+
+// Clear all data
+function clearAllData() {
+    if (confirm('Are you sure you want to clear all analysis history?')) {
+        localStorage.removeItem('recentAnalysis');
+        loadRecentAnalysis();
+        showNotification('History cleared successfully!', 'success');
+    }
+}
+
+// View analysis detail
+function viewAnalysis(id) {
+    window.location.href = `/results?id=${id}`;
+}
+
+// Delete single analysis
+function deleteAnalysis(id) {
+    const recentAnalysis = JSON.parse(localStorage.getItem('recentAnalysis') || '[]');
+    const updated = recentAnalysis.filter(item => item.id !== id);
+    localStorage.setItem('recentAnalysis', JSON.stringify(updated));
+    loadRecentAnalysis();
+    showNotification('Analysis deleted!', 'success');
+}
+</script>
+
+<style>
+.tool-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+    border-color: var(--accent);
+}
+
+.counter {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+</style>
+{% endblock %}

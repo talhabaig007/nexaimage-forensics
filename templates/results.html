@@ -1,0 +1,927 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis Results - NexaImage Forensics{% endblock %}
+
+{% block content %}
+<!-- Results Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2><i class="fas fa-chart-bar"></i> Analysis Results</h2>
+        <p class="text-muted">Detailed forensic analysis of your image</p>
+    </div>
+    <div>
+        <button class="btn btn-cyber" onclick="generateReport()">
+            <i class="fas fa-file-pdf"></i> Download PDF Report
+        </button>
+        <button class="btn btn-outline-info ms-2" onclick="window.print()">
+            <i class="fas fa-print"></i> Print
+        </button>
+    </div>
+</div>
+
+<!-- Module 1: Image Preview -->
+<div class="glass-card mb-4" id="imagePreview">
+    <h4><i class="fas fa-image"></i> Image Preview</h4>
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <div class="image-preview-container" style="background: rgba(0,0,0,0.3); border-radius: 10px; padding: 20px; text-align: center; min-height: 300px; display: flex; align-items: center; justify-content: center;">
+                <img id="previewImage" src="" alt="Preview" style="max-width: 100%; max-height: 400px; border-radius: 10px; display: none;">
+                <div id="noImagePlaceholder">
+                    <i class="fas fa-image fa-5x" style="color: var(--text-secondary);"></i>
+                    <p class="text-muted mt-3">No image loaded</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="previewInfo">
+                <div class="info-item">
+                    <strong>File Name:</strong> <span id="previewFilename">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>Extension:</strong> <span id="previewExtension">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>File Size:</strong> <span id="previewSize">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>Width:</strong> <span id="previewWidth">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>Height:</strong> <span id="previewHeight">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>Resolution:</strong> <span id="previewResolution">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>Aspect Ratio:</strong> <span id="previewAspectRatio">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>Format:</strong> <span id="previewFormat">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Module 2: Image Information -->
+<div class="glass-card mb-4" id="imageInformation">
+    <h4><i class="fas fa-info-circle"></i> Image Information</h4>
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <div class="info-card p-3">
+                <h6>Resolution</h6>
+                <p id="infoResolution">-</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-card p-3">
+                <h6>Dimensions</h6>
+                <p id="infoDimensions">-</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-card p-3">
+                <h6>Aspect Ratio</h6>
+                <p id="infoAspectRatio">-</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-card p-3">
+                <h6>Color Mode</h6>
+                <p id="infoColorMode">-</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-card p-3">
+                <h6>Bit Depth</h6>
+                <p id="infoBitDepth">-</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-card p-3">
+                <h6>DPI</h6>
+                <p id="infoDPI">-</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-card p-3">
+                <h6>Compression</h6>
+                <p id="infoCompression">-</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-card p-3">
+                <h6>MIME Type</h6>
+                <p id="infoMIMEType">-</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-card p-3">
+                <h6>Creation Date</h6>
+                <p id="infoCreationDate">-</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-card p-3">
+                <h6>Modification Date</h6>
+                <p id="infoModificationDate">-</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Module 3: Full EXIF Metadata -->
+<div class="glass-card mb-4" id="exifMetadata">
+    <h4><i class="fas fa-camera"></i> Full EXIF Metadata</h4>
+    <div class="table-responsive mt-3">
+        <table class="table table-dark table-hover" id="exifTable">
+            <thead>
+                <tr>
+                    <th>EXIF Tag</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody id="exifTableBody">
+                <tr>
+                    <td colspan="2" class="text-center text-muted">No EXIF data available</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="noExifMessage" class="alert alert-info" style="display: none;">
+        <i class="fas fa-info-circle"></i> No EXIF Metadata Found
+    </div>
+</div>
+
+<!-- Module 4: GPS Analysis -->
+<div class="glass-card mb-4" id="gpsAnalysis">
+    <h4><i class="fas fa-map-marker-alt"></i> GPS Analysis</h4>
+    <div id="gpsAvailable" style="display: none;">
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="info-item">
+                    <strong>Latitude:</strong> <span id="gpsLatitude">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>Longitude:</strong> <span id="gpsLongitude">-</span>
+                </div>
+                <div class="info-item">
+                    <strong>Altitude:</strong> <span id="gpsAltitude">-</span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="reverseGeocoding">
+                    <div class="info-item">
+                        <strong>Country:</strong> <span id="geoCountry">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Province:</strong> <span id="geoProvince">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>City:</strong> <span id="geoCity">-</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Street:</strong> <span id="geoStreet">-</span>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-sm btn-cyber" onclick="openGoogleMaps()">
+                        <i class="fab fa-google"></i> Google Maps
+                    </button>
+                    <button class="btn btn-sm btn-outline-info" onclick="openOpenStreetMap()">
+                        <i class="fas fa-map"></i> OpenStreetMap
+                    </button>
+                    <button class="btn btn-sm btn-outline-success" onclick="copyCoordinates()">
+                        <i class="fas fa-copy"></i> Copy Coordinates
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="resultMap" style="height: 400px; margin-top: 20px; border-radius: 10px;"></div>
+    </div>
+    <div id="noGPSMessage" class="alert alert-info">
+        <i class="fas fa-info-circle"></i> No GPS Location Available
+    </div>
+</div>
+
+<!-- Module 5: Metadata Summary -->
+<div class="glass-card mb-4" id="metadataSummary">
+    <h4><i class="fas fa-clipboard-list"></i> Metadata Summary</h4>
+    <div class="row mt-3">
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="summary-card p-3 text-center">
+                <i class="fas fa-camera fa-2x mb-2" style="color: var(--accent);"></i>
+                <h6>Camera Used</h6>
+                <p id="summaryCamera">-</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="summary-card p-3 text-center">
+                <i class="fas fa-calendar fa-2x mb-2" style="color: var(--accent);"></i>
+                <h6>Captured Date</h6>
+                <p id="summaryDate">-</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="summary-card p-3 text-center">
+                <i class="fas fa-clock fa-2x mb-2" style="color: var(--accent);"></i>
+                <h6>Captured Time</h6>
+                <p id="summaryTime">-</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="summary-card p-3 text-center">
+                <i class="fas fa-laptop fa-2x mb-2" style="color: var(--accent);"></i>
+                <h6>Software Used</h6>
+                <p id="summarySoftware">-</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="summary-card p-3 text-center">
+                <i class="fas fa-map-marker-alt fa-2x mb-2" style="color: var(--accent);"></i>
+                <h6>GPS Status</h6>
+                <p id="summaryGPS">-</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="summary-card p-3 text-center">
+                <i class="fas fa-tags fa-2x mb-2" style="color: var(--accent);"></i>
+                <h6>Metadata Status</h6>
+                <p id="summaryMetadata">-</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="summary-card p-3 text-center">
+                <i class="fas fa-compass fa-2x mb-2" style="color: var(--accent);"></i>
+                <h6>Orientation</h6>
+                <p id="summaryOrientation">-</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="summary-card p-3 text-center">
+                <i class="fas fa-file-image fa-2x mb-2" style="color: var(--accent);"></i>
+                <h6>Image Type</h6>
+                <p id="summaryType">-</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Module 6: Cryptographic Hashes -->
+<div class="glass-card mb-4" id="hashSection">
+    <h4><i class="fas fa-shield-alt"></i> Cryptographic Hashes</h4>
+    <div class="mt-3">
+        <div class="hash-item mb-3">
+            <strong>MD5:</strong>
+            <div class="hash-value" id="hashMD5">-</div>
+            <button class="btn btn-sm btn-outline-info mt-1" onclick="copyToClipboard(document.getElementById('hashMD5').textContent)">
+                <i class="fas fa-copy"></i> Copy
+            </button>
+        </div>
+        <div class="hash-item mb-3">
+            <strong>SHA1:</strong>
+            <div class="hash-value" id="hashSHA1">-</div>
+            <button class="btn btn-sm btn-outline-info mt-1" onclick="copyToClipboard(document.getElementById('hashSHA1').textContent)">
+                <i class="fas fa-copy"></i> Copy
+            </button>
+        </div>
+        <div class="hash-item mb-3">
+            <strong>SHA256:</strong>
+            <div class="hash-value" id="hashSHA256">-</div>
+            <button class="btn btn-sm btn-outline-info mt-1" onclick="copyToClipboard(document.getElementById('hashSHA256').textContent)">
+                <i class="fas fa-copy"></i> Copy
+            </button>
+        </div>
+        <div class="hash-item mb-3">
+            <strong>SHA512:</strong>
+            <div class="hash-value" id="hashSHA512">-</div>
+            <button class="btn btn-sm btn-outline-info mt-1" onclick="copyToClipboard(document.getElementById('hashSHA512').textContent)">
+                <i class="fas fa-copy"></i> Copy
+            </button>
+        </div>
+    </div>
+    
+    <!-- Module 10: File Hash Verification -->
+    <div class="mt-4">
+        <h5><i class="fas fa-check-double"></i> Hash Verification</h5>
+        <div class="row">
+            <div class="col-md-6">
+                <label class="form-label">Hash Type</label>
+                <select class="form-select bg-dark text-light" id="hashType">
+                    <option value="md5">MD5</option>
+                    <option value="sha1">SHA1</option>
+                    <option value="sha256">SHA256</option>
+                    <option value="sha512">SHA512</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Expected Hash</label>
+                <input type="text" class="form-control bg-dark text-light" id="expectedHash" placeholder="Paste hash to verify">
+            </div>
+        </div>
+        <button class="btn btn-cyber mt-3" onclick="verifyHash()">
+            <i class="fas fa-check-circle"></i> Verify Hash
+        </button>
+        <div id="hashVerificationResult" class="mt-3" style="display: none;"></div>
+    </div>
+</div>
+
+<!-- Module 7: Image Analysis -->
+<div class="glass-card mb-4" id="imageAnalysisSection">
+    <h4><i class="fas fa-chart-bar"></i> Image Analysis</h4>
+    <div class="row mt-3">
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="analysis-card p-3 text-center">
+                <h6>Brightness</h6>
+                <p class="h4" id="analysisBrightness" style="color: var(--accent);">-</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="analysis-card p-3 text-center">
+                <h6>Contrast</h6>
+                <p class="h4" id="analysisContrast" style="color: var(--accent);">-</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="analysis-card p-3 text-center">
+                <h6>Sharpness</h6>
+                <p class="h4" id="analysisSharpness" style="color: var(--accent);">-</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="analysis-card p-3 text-center">
+                <h6>Noise</h6>
+                <p class="h4" id="analysisNoise" style="color: var(--accent);">-</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Average RGB -->
+    <div class="mt-3">
+        <h6>Average RGB</h6>
+        <div class="d-flex align-items-center">
+            <div id="avgRed" class="color-box me-2" style="width: 50px; height: 50px; background: red; border-radius: 5px;"></div>
+            <div id="avgGreen" class="color-box me-2" style="width: 50px; height: 50px; background: green; border-radius: 5px;"></div>
+            <div id="avgBlue" class="color-box me-2" style="width: 50px; height: 50px; background: blue; border-radius: 5px;"></div>
+            <span id="avgRGBTxt">-</span>
+        </div>
+    </div>
+    
+    <!-- Dominant Colors -->
+    <div class="mt-4">
+        <h6>Dominant Colors</h6>
+        <div id="dominantColors" class="d-flex flex-wrap gap-2 mt-2"></div>
+    </div>
+    
+    <!-- Histogram -->
+    <div class="mt-4">
+        <h6>Color Histogram</h6>
+        <canvas id="histogramChart" style="max-height: 200px;"></canvas>
+    </div>
+    
+    <!-- Additional Info -->
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <p><strong>Resolution Quality:</strong> <span id="analysisResolution">-</span></p>
+        </div>
+        <div class="col-md-4">
+            <p><strong>Compression:</strong> <span id="analysisCompression">-</span></p>
+        </div>
+        <div class="col-md-4">
+            <p><strong>Entropy:</strong> <span id="analysisEntropy">-</span></p>
+        </div>
+    </div>
+</div>
+
+<!-- Module 8: OCR -->
+<div class="glass-card mb-4" id="ocrSection">
+    <h4><i class="fas fa-font"></i> OCR Text Extraction</h4>
+    <div id="ocrAvailable" style="display: none;">
+        <div class="row mt-3">
+            <div class="col-md-3">
+                <div class="info-card p-3 text-center">
+                    <h6>Word Count</h6>
+                    <p class="h4" id="ocrWordCount" style="color: var(--accent);">0</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="info-card p-3 text-center">
+                    <h6>Character Count</h6>
+                    <p class="h4" id="ocrCharCount" style="color: var(--accent);">0</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-sm btn-outline-info me-2" onclick="copyOCRText()">
+                    <i class="fas fa-copy"></i> Copy Text
+                </button>
+                <button class="btn btn-sm btn-outline-success" onclick="downloadOCRText()">
+                    <i class="fas fa-download"></i> Download TXT
+                </button>
+            </div>
+        </div>
+        <div class="mt-3 p-3" style="background: rgba(0,0,0,0.3); border-radius: 10px; max-height: 300px; overflow-y: auto;">
+            <pre id="ocrText" style="color: white; margin: 0; white-space: pre-wrap;"></pre>
+        </div>
+    </div>
+    <div id="noOCRMessage" class="alert alert-info">
+        <i class="fas fa-info-circle"></i> No text detected in the image
+    </div>
+</div>
+
+<!-- Module 9: Security Analysis -->
+<div class="glass-card mb-4" id="securitySection">
+    <h4><i class="fas fa-shield-haltered"></i> Security Analysis</h4>
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <div class="security-checks">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Metadata Available</span>
+                    <span id="secMetadata"></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>GPS Available</span>
+                    <span id="secGPS"></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Edited Software Detected</span>
+                    <span id="secEdited"></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Metadata Removed</span>
+                    <span id="secMetadataRemoved"></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Likely Screenshot</span>
+                    <span id="secScreenshot"></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Likely Camera Photo</span>
+                    <span id="secCamera"></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Social Media Compression</span>
+                    <span id="secSocialMedia"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="risk-indicator text-center p-4" style="background: rgba(0,0,0,0.3); border-radius: 10px;">
+                <h5>Risk Indicator</h5>
+                <div id="riskLevel" class="display-1 my-3"></div>
+                <p id="riskConfidence"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Load Results Script -->
+<script>
+// Load analysis data when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const analysisId = urlParams.get('id');
+    
+    if (analysisId) {
+        loadSavedAnalysis(analysisId);
+    } else {
+        // Check if there's data from a recent upload
+        if (currentAnalysisData) {
+            populateResults(currentAnalysisData);
+        } else {
+            showNotification('No analysis data found. Please upload an image first.', 'warning');
+        }
+    }
+});
+
+function populateResults(data) {
+    // Store globally
+    window.currentAnalysisData = data;
+    
+    // Populate Image Preview
+    populateImagePreview(data);
+    
+    // Populate Image Information
+    populateImageInfo(data.image_info);
+    
+    // Populate EXIF Data
+    populateExifData(data.exif_data);
+    
+    // Populate GPS Data
+    populateGPSData(data.gps_data);
+    
+    // Populate Metadata Summary
+    populateMetadataSummary(data.metadata_summary);
+    
+    // Populate Hashes
+    populateHashes(data.hashes);
+    
+    // Populate Image Analysis
+    populateImageAnalysis(data.image_analysis);
+    
+    // Populate OCR
+    populateOCR(data.ocr_text);
+    
+    // Populate Security Analysis
+    populateSecurityAnalysis(data.security_analysis);
+}
+
+function populateImagePreview(data) {
+    const fileInfo = data.file_info;
+    document.getElementById('previewFilename').textContent = fileInfo.filename;
+    document.getElementById('previewExtension').textContent = fileInfo.extension;
+    document.getElementById('previewSize').textContent = fileInfo.size_formatted;
+}
+
+function populateImageInfo(imageInfo) {
+    document.getElementById('infoResolution').textContent = imageInfo.resolution || 'N/A';
+    document.getElementById('infoDimensions').textContent = `${imageInfo.width || '?'} x ${imageInfo.height || '?'}`;
+    document.getElementById('infoAspectRatio').textContent = imageInfo.aspect_ratio || 'N/A';
+    document.getElementById('infoColorMode').textContent = imageInfo.color_mode || 'N/A';
+    document.getElementById('infoBitDepth').textContent = imageInfo.bit_depth || 'N/A';
+    document.getElementById('infoDPI').textContent = imageInfo.dpi ? `${imageInfo.dpi[0]}` : 'N/A';
+    document.getElementById('infoMIMEType').textContent = imageInfo.mime_type || 'N/A';
+}
+
+function populateExifData(exifData) {
+    const tbody = document.getElementById('exifTableBody');
+    
+    if (!exifData.available || !exifData.data) {
+        tbody.innerHTML = '<tr><td colspan="2" class="text-center text-muted">No EXIF Metadata Found</td></tr>';
+        return;
+    }
+    
+    let rows = '';
+    for (const [key, value] of Object.entries(exifData.data)) {
+        rows += `<tr><td>${key}</td><td>${value}</td></tr>`;
+    }
+    tbody.innerHTML = rows;
+}
+
+function populateGPSData(gpsData) {
+    if (!gpsData.available) {
+        document.getElementById('gpsAvailable').style.display = 'none';
+        document.getElementById('noGPSMessage').style.display = 'block';
+        return;
+    }
+    
+    document.getElementById('gpsAvailable').style.display = 'block';
+    document.getElementById('noGPSMessage').style.display = 'none';
+    
+    document.getElementById('gpsLatitude').textContent = gpsData.latitude;
+    document.getElementById('gpsLongitude').textContent = gpsData.longitude;
+    document.getElementById('gpsAltitude').textContent = gpsData.altitude || 'N/A';
+    
+    // Initialize map
+    setTimeout(() => {
+        const map = L.map('resultMap').setView([gpsData.latitude, gpsData.longitude], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        L.marker([gpsData.latitude, gpsData.longitude]).addTo(map)
+            .bindPopup(`Lat: ${gpsData.latitude}<br>Lon: ${gpsData.longitude}`)
+            .openPopup();
+    }, 100);
+    
+    // Try reverse geocoding
+    reverseGeocode(gpsData.latitude, gpsData.longitude);
+}
+
+async function reverseGeocode(lat, lon) {
+    try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+        const data = await response.json();
+        
+        if (data.address) {
+            document.getElementById('geoCountry').textContent = data.address.country || 'N/A';
+            document.getElementById('geoProvince').textContent = data.address.state || 'N/A';
+            document.getElementById('geoCity').textContent = data.address.city || data.address.town || 'N/A';
+            document.getElementById('geoStreet').textContent = data.address.road || 'N/A';
+        }
+    } catch (error) {
+        console.log('Reverse geocoding failed:', error);
+    }
+}
+
+function populateMetadataSummary(summary) {
+    document.getElementById('summaryCamera').textContent = summary.camera_used || 'Unknown';
+    document.getElementById('summaryDate').textContent = summary.captured_date || 'Unknown';
+    document.getElementById('summaryTime').textContent = summary.captured_time || 'Unknown';
+    document.getElementById('summarySoftware').textContent = summary.software_used || 'None';
+    document.getElementById('summaryGPS').textContent = summary.gps_status || 'N/A';
+    document.getElementById('summaryMetadata').textContent = summary.metadata_status || 'N/A';
+    document.getElementById('summaryOrientation').textContent = summary.image_orientation || 'Unknown';
+    document.getElementById('summaryType').textContent = summary.image_type || 'Unknown';
+}
+
+function populateHashes(hashes) {
+    document.getElementById('hashMD5').textContent = hashes.md5 || '-';
+    document.getElementById('hashSHA1').textContent = hashes.sha1 || '-';
+    document.getElementById('hashSHA256').textContent = hashes.sha256 || '-';
+    document.getElementById('hashSHA512').textContent = hashes.sha512 || '-';
+}
+
+function populateImageAnalysis(analysis) {
+    document.getElementById('analysisBrightness').textContent = analysis.brightness || '-';
+    document.getElementById('analysisContrast').textContent = analysis.contrast || '-';
+    document.getElementById('analysisSharpness').textContent = analysis.sharpness || '-';
+    document.getElementById('analysisNoise').textContent = analysis.noise_estimation || '-';
+    document.getElementById('analysisCompression').textContent = analysis.compression_estimation || '-';
+    document.getElementById('analysisEntropy').textContent = analysis.entropy || '-';
+    
+    // RGB values
+    if (analysis.average_rgb) {
+        document.getElementById('avgRGBTxt').textContent = `R:${analysis.average_rgb.red} G:${analysis.average_rgb.green} B:${analysis.average_rgb.blue}`;
+        document.getElementById('avgRed').style.backgroundColor = `rgb(${analysis.average_rgb.red},0,0)`;
+        document.getElementById('avgGreen').style.backgroundColor = `rgb(0,${analysis.average_rgb.green},0)`;
+        document.getElementById('avgBlue').style.backgroundColor = `rgb(0,0,${analysis.average_rgb.blue})`;
+    }
+    
+    // Dominant colors
+    if (analysis.dominant_colors) {
+        const colorsDiv = document.getElementById('dominantColors');
+        colorsDiv.innerHTML = analysis.dominant_colors.map(color => `
+            <div style="text-align: center;">
+                <div style="width: 50px; height: 50px; background: ${color.hex}; border-radius: 8px; border: 2px solid var(--glass-border);"></div>
+                <small style="color: var(--text-secondary);">${color.percentage}</small>
+            </div>
+        `).join('');
+    }
+    
+    // Histogram chart
+    if (analysis.histogram) {
+        const ctx = document.getElementById('histogramChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 256}, (_, i) => i),
+                    datasets: [
+                        {
+                            label: 'Red',
+                            data: analysis.histogram.red,
+                            borderColor: '#ff0000',
+                            backgroundColor: 'rgba(255,0,0,0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Green',
+                            data: analysis.histogram.green,
+                            borderColor: '#00ff00',
+                            backgroundColor: 'rgba(0,255,0,0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Blue',
+                            data: analysis.histogram.blue,
+                            borderColor: '#0000ff',
+                            backgroundColor: 'rgba(0,0,255,0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#ffffff' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#ffffff', maxTicksLimit: 10 }
+                        }
+                    }
+                }
+            });
+        }
+    }
+}
+
+function populateOCR(ocrData) {
+    if (!ocrData.available || !ocrData.text) {
+        document.getElementById('ocrAvailable').style.display = 'none';
+        document.getElementById('noOCRMessage').style.display = 'block';
+        return;
+    }
+    
+    document.getElementById('ocrAvailable').style.display = 'block';
+    document.getElementById('noOCRMessage').style.display = 'none';
+    document.getElementById('ocrText').textContent = ocrData.text;
+    document.getElementById('ocrWordCount').textContent = ocrData.word_count;
+    document.getElementById('ocrCharCount').textContent = ocrData.character_count;
+}
+
+function populateSecurityAnalysis(security) {
+    const riskLevel = security.risk_indicator;
+    
+    // Set risk level with color
+    const riskElement = document.getElementById('riskLevel');
+    riskElement.textContent = riskLevel.level;
+    
+    if (riskLevel.level === 'Green') {
+        riskElement.style.color = 'var(--success)';
+    } else if (riskLevel.level === 'Yellow') {
+        riskElement.style.color = 'var(--warning)';
+    } else {
+        riskElement.style.color = 'var(--danger)';
+    }
+    
+    document.getElementById('riskConfidence').textContent = `Confidence: ${riskLevel.confidence}`;
+    
+    // Security checks
+    document.getElementById('secMetadata').innerHTML = security.metadata_available ? 
+        '<i class="fas fa-check-circle risk-green"></i> Yes' : 
+        '<i class="fas fa-times-circle risk-red"></i> No';
+    
+    document.getElementById('secGPS').innerHTML = security.gps_available ? 
+        '<i class="fas fa-check-circle risk-green"></i> Yes' : 
+        '<i class="fas fa-times-circle risk-red"></i> No';
+    
+    document.getElementById('secEdited').innerHTML = security.edited_software_detected ? 
+        '<i class="fas fa-exclamation-triangle risk-yellow"></i> Yes' : 
+        '<i class="fas fa-check-circle risk-green"></i> No';
+    
+    document.getElementById('secMetadataRemoved').innerHTML = security.metadata_removed ? 
+        '<i class="fas fa-check-circle risk-green"></i> Yes' : 
+        '<i class="fas fa-times-circle risk-red"></i> No';
+    
+    document.getElementById('secScreenshot').innerHTML = security.likely_screenshot ? 
+        '<i class="fas fa-check-circle risk-green"></i> Yes' : 
+        '<i class="fas fa-times-circle risk-red"></i> No';
+    
+    document.getElementById('secCamera').innerHTML = security.likely_camera_photo ? 
+        '<i class="fas fa-check-circle risk-green"></i> Yes' : 
+        '<i class="fas fa-times-circle risk-red"></i> No';
+    
+    document.getElementById('secSocialMedia').innerHTML = security.possible_social_media_compression ? 
+        '<i class="fas fa-exclamation-triangle risk-yellow"></i> Yes' : 
+        '<i class="fas fa-check-circle risk-green"></i> No';
+}
+
+// Utility Functions
+function openGoogleMaps() {
+    const lat = document.getElementById('gpsLatitude').textContent;
+    const lon = document.getElementById('gpsLongitude').textContent;
+    window.open(`https://www.google.com/maps?q=${lat},${lon}`, '_blank');
+}
+
+function openOpenStreetMap() {
+    const lat = document.getElementById('gpsLatitude').textContent;
+    const lon = document.getElementById('gpsLongitude').textContent;
+    window.open(`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}&zoom=15`, '_blank');
+}
+
+function copyCoordinates() {
+    const lat = document.getElementById('gpsLatitude').textContent;
+    const lon = document.getElementById('gpsLongitude').textContent;
+    copyToClipboard(`${lat}, ${lon}`);
+}
+
+function copyOCRText() {
+    const text = document.getElementById('ocrText').textContent;
+    copyToClipboard(text);
+}
+
+function downloadOCRText() {
+    const text = document.getElementById('ocrText').textContent;
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ocr_text.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function verifyHash() {
+    const hashType = document.getElementById('hashType').value;
+    const expectedHash = document.getElementById('expectedHash').value.trim();
+    const resultDiv = document.getElementById('hashVerificationResult');
+    
+    if (!expectedHash) {
+        showNotification('Please enter a hash to verify', 'warning');
+        return;
+    }
+    
+    let currentHash;
+    switch(hashType) {
+        case 'md5': currentHash = document.getElementById('hashMD5').textContent; break;
+        case 'sha1': currentHash = document.getElementById('hashSHA1').textContent; break;
+        case 'sha256': currentHash = document.getElementById('hashSHA256').textContent; break;
+        case 'sha512': currentHash = document.getElementById('hashSHA512').textContent; break;
+    }
+    
+    resultDiv.style.display = 'block';
+    
+    if (currentHash.toLowerCase() === expectedHash.toLowerCase()) {
+        resultDiv.innerHTML = `
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i> 
+                <strong>Matched!</strong> The hash values are identical.
+            </div>
+        `;
+    } else {
+        resultDiv.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-times-circle"></i> 
+                <strong>Not Matched!</strong> The hash values are different.
+            </div>
+        `;
+    }
+}
+
+function loadSavedAnalysis(analysisId) {
+    const recentAnalysis = JSON.parse(localStorage.getItem('recentAnalysis') || '[]');
+    const analysis = recentAnalysis.find(item => item.id === analysisId);
+    
+    if (analysis) {
+        populateResults(analysis.data);
+    } else {
+        showNotification('Analysis not found', 'danger');
+    }
+}
+
+// Save analysis to local storage after new analysis
+function saveToRecentAnalysis(data) {
+    const recentAnalysis = JSON.parse(localStorage.getItem('recentAnalysis') || '[]');
+    
+    recentAnalysis.unshift({
+        id: data.analysis_id,
+        filename: data.file_info.filename,
+        date: data.analysis_date,
+        riskLevel: data.security_analysis.risk_indicator.level,
+        data: data
+    });
+    
+    // Keep only last 50 analyses
+    if (recentAnalysis.length > 50) {
+        recentAnalysis.pop();
+    }
+    
+    localStorage.setItem('recentAnalysis', JSON.stringify(recentAnalysis));
+}
+</script>
+
+<style>
+.info-item {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.info-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.summary-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.summary-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+}
+
+.analysis-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+}
+
+.hash-item {
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+}
+
+.security-checks {
+    background: rgba(0,0,0,0.2);
+    padding: 20px;
+    border-radius: 10px;
+}
+</style>
+{% endblock %}

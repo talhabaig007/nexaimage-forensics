@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - NexaImage Forensics{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="fas fa-cog"></i> Settings</h2>
+
+<div class="glass-card">
+    <h4>Appearance</h4>
+    <div class="mt-3">
+        <label class="form-label">Theme</label>
+        <select class="form-select bg-dark text-light" id="themeSelect">
+            <option value="dark">Dark Mode</option>
+            <option value="light">Light Mode</option>
+        </select>
+    </div>
+</div>
+
+<div class="glass-card mt-4">
+    <h4>Language</h4>
+    <div class="mt-3">
+        <label class="form-label">Select Language</label>
+        <select class="form-select bg-dark text-light" id="languageSelect">
+            <option value="en">English</option>
+            <option value="ur">Urdu</option>
+        </select>
+    </div>
+</div>
+
+<div class="glass-card mt-4">
+    <h4>Data Management</h4>
+    <button class="btn btn-outline-warning mt-3" onclick="clearCache()">
+        <i class="fas fa-trash"></i> Clear Cache
+    </button>
+    <button class="btn btn-outline-info mt-3 ms-2" onclick="exportSettings()">
+        <i class="fas fa-download"></i> Export Settings
+    </button>
+</div>
+
+<script>
+function clearCache() {
+    localStorage.clear();
+    showNotification('Cache cleared successfully!', 'success');
+}
+
+function exportSettings() {
+    const settings = {
+        theme: document.getElementById('themeSelect').value,
+        language: document.getElementById('languageSelect').value
+    };
+    
+    const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'nexaimage_settings.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    showNotification('Settings exported!', 'success');
+}
+
+// Load saved settings
+document.addEventListener('DOMContentLoaded', function() {
+    const theme = localStorage.getItem('theme') || 'dark';
+    const language = localStorage.getItem('language') || 'en';
+    
+    document.getElementById('themeSelect').value = theme;
+    document.getElementById('languageSelect').value = language;
+    
+    // Apply theme
+    applyTheme(theme);
+});
+
+document.getElementById('themeSelect').addEventListener('change', function(e) {
+    const theme = e.target.value;
+    localStorage.setItem('theme', theme);
+    applyTheme(theme);
+});
+
+function applyTheme(theme) {
+    if (theme === 'light') {
+        document.documentElement.style.setProperty('--bg-primary', '#f0f0f0');
+        document.documentElement.style.setProperty('--bg-secondary', '#ffffff');
+        document.documentElement.style.setProperty('--text-primary', '#000000');
+        document.documentElement.style.setProperty('--text-secondary', '#666666');
+        document.documentElement.style.setProperty('--glass-bg', 'rgba(255, 255, 255, 0.8)');
+    } else {
+        document.documentElement.style.setProperty('--bg-primary', '#0a0e17');
+        document.documentElement.style.setProperty('--bg-secondary', '#16213e');
+        document.documentElement.style.setProperty('--text-primary', '#ffffff');
+        document.documentElement.style.setProperty('--text-secondary', '#b0b0b0');
+        document.documentElement.style.setProperty('--glass-bg', 'rgba(255, 255, 255, 0.05)');
+    }
+}
+</script>
+{% endblock %}
